@@ -1,32 +1,22 @@
-from homeassistant.components.cover import (
-    CoverEntity,
-    CoverEntityFeature,
-)
-from homeassistant.helpers.update_coordinator import CoordinatorEntity
+from homeassistant.components.cover import CoverEntity
 from .const import DOMAIN
 
-async def async_setup_entry(hass, entry, async_add_entities):
-    coordinator = hass.data[DOMAIN][entry.entry_id]
-    async_add_entities([RemootioCover(coordinator)])
+class RemootioCover(CoverEntity):
+    def __init__(self, coordinator, entry_id):
+        self.coordinator = coordinator
+        self.entry_id = entry_id
+        self._state = None
+        self.coordinator.add_listener(self._update_state)
 
-class RemootioCover(CoordinatorEntity, CoverEntity):
-
-    def __init__(self, coordinator):
-        super().__init__(coordinator)
-        self._attr_name = "Garage Door"
-        self._attr_supported_features = (
-            CoverEntityFeature.OPEN |
-            CoverEntityFeature.CLOSE |
-            CoverEntityFeature.STOP
-        )
+    @property
+    def name(self):
+        return f"Remootio 3 Door {self.entry_id}"
 
     @property
     def is_closed(self):
-        return self.coordinator.data == "closed"
-
-    @property
-    def available(self):
-        return self.coordinator.client.connected
+        if self._state is None:
+            return None
+        return self._state == "closed"
 
     async def async_open_cover(self, **kwargs):
         await self.coordinator.client.send_command("open")
@@ -36,3 +26,7 @@ class RemootioCover(CoordinatorEntity, CoverEntity):
 
     async def async_stop_cover(self, **kwargs):
         await self.coordinator.client.send_command("stop")
+
+    def _update_state(self, state):
+        self._state = state
+        self.async_write_ha_state()
