@@ -1,24 +1,21 @@
-# Remootio WebSocket (Encrypted)
+# Remootio WebSocket Integration for Home Assistant
 
-Local encrypted WebSocket integration for Remootio 3 (Firmware 2.51+).
+This integration allows you to control Remootio 3 garage doors via the **plain WebSocket API** (firmware 2.51) in Home Assistant.
 
 ## Features
+- Open, close, stop commands
+- Real-time door state updates
+- Plain WS connection (port 8080)
+- Firmware 2.51 safe AES-HMAC authentication
 
-- AES-CBC + HMAC-SHA256 authentication
-- Local-only control
-- Cover entity support
-- Auto reconnect
-- HACS compatible
+## Installation via HACS
+1. Go to **HACS → Integrations → Custom Repositories → Add**
+2. Add the repository (or upload the zip) and select **Integration**
+3. Install the integration
+4. Restart Home Assistant
+5. Configure with **host**, **port** (usually 8080), **API Key**, and **API Secret**
 
-## Installation
-
-1. Add repository to HACS (Custom Repository)
-2. Install integration
-3. Restart Home Assistant
-4. Add via Devices & Services
-
-## Required
-
-- Local WebSocket enabled
-- API Key
-- API Secret
+## Notes
+- Make sure your Remootio 3 has **Local WebSocket enabled**
+- This integration is designed for **firmware 2.51** with plain WS (unencrypted)
+- Debug logs appear in **Home Assistant Core logs** if authentication or connection fails
