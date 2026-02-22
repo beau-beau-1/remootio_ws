@@ -1,7 +1,7 @@
 {
   "domain": "remootio_ws",
   "name": "Remootio WebSocket",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "documentation": "https://github.com/remootio/remootio-api-documentation/blob/master/websocket_api_v3_specification.md",
   "requirements": ["websockets>=11.0", "pycryptodome>=3.17"],
   "dependencies": [],
